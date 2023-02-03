@@ -1,4 +1,3 @@
-import styled, { keyframes } from "styled-components";
 import Circle from "./Circle";
 
 function App() {
