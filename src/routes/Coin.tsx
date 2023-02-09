@@ -20,6 +20,21 @@ const Overview = styled.div`
   padding: 10px 20px;
   border-radius: 10px;
 `;
+
+const Button = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+
+  width: 50px;
+  height: 50px;
+  a {
+    padding: 15px 15px;
+  }
+`;
+
 const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,7 +66,7 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 const Tabs = styled.div`
@@ -171,9 +186,14 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
+        <Button>
+          <Link to={"/"}>←</Link>
+        </Button>
+
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <Button style={{ opacity: "0" }} />
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
