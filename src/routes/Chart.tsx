@@ -21,6 +21,7 @@ function Chart({ coinId }: CharProps) {
   const { isLoading, data } = useQuery<IData[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
   );
+
   return (
     <div>
       {isLoading ? (
@@ -28,11 +29,18 @@ function Chart({ coinId }: CharProps) {
       ) : (
         // @ts-ignore
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
               name: "Price",
-              data: data?.map((price) => parseFloat(price.close)) ?? [],
+              data:
+                data?.map((price) => [
+                  price.time_close,
+                  parseFloat(price.open),
+                  parseFloat(price.high),
+                  parseFloat(price.low),
+                  parseFloat(price.close),
+                ]) ?? [],
             },
           ]}
           options={{
@@ -42,16 +50,19 @@ function Chart({ coinId }: CharProps) {
               width: 500,
               toolbar: { show: false },
               background: "transparent",
+              animations: {
+                enabled: true,
+              },
             },
             stroke: {
               curve: "smooth",
-              width: 5,
+              width: 2,
             },
             grid: {
-              show: false,
+              show: true,
             },
             yaxis: {
-              show: false,
+              show: true,
             },
             xaxis: {
               axisBorder: { show: false },
@@ -62,11 +73,19 @@ function Chart({ coinId }: CharProps) {
                 new Date(price.time_close * 1000).toUTCString()
               ),
             },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#4cd137"], stops: [0, 100] },
-            },
+            // fill: {
+            //   type: "gradient",
+            //   gradient: { gradientToColors: ["#4cd137"], stops: [0, 100] },
+            // },
             colors: ["#37d1bf"],
+            // plotOptions: {
+            //   candlestick: {
+            //     colors: {
+            //       upward: "#3C90EB",
+            //       downward: "#DF7D46",
+            //     },
+            //   },
+            // },
             tooltip: {
               y: {
                 formatter: (value) => `$ ${value.toFixed(0)}`,
