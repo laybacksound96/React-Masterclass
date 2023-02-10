@@ -13,8 +13,14 @@ export function fetchCoinTickers(coinId: string) {
     response.json()
   );
 }
-export function fetchCoinHistory(coinId: string) {
-  return fetch(
+export async function fetchCoinHistory(coinId: string) {
+  const response = await fetch(
     `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
-  ).then((response) => response.json());
+  );
+  if (!response.ok) {
+    throw new Error("Error occured by fetching at (Fn)fetchCoinHistory");
+  } else {
+    const data = await response.json();
+    return data;
+  }
 }

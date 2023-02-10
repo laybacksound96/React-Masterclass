@@ -18,14 +18,16 @@ interface CharProps {
   coinId: string;
 }
 function Chart({ coinId }: CharProps) {
-  const { isLoading, data } = useQuery<IData[]>(["ohlcv", coinId], () =>
-    fetchCoinHistory(coinId)
+  const { isError, isLoading, data } = useQuery<IData[]>(
+    ["ohlcv", coinId],
+    () => fetchCoinHistory(coinId)
   );
-
   return (
     <div>
       {isLoading ? (
         "Loading Chart..."
+      ) : isError ? (
+        "에러가 발생하여 차트를 표시하지 못했습니다."
       ) : (
         // @ts-ignore
         <ApexChart
