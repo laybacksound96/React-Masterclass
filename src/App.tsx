@@ -1,11 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { isDarkAtom } from "./atoms";
 import Router from "./Router";
 import { useRecoilValue } from "recoil";
 // import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./theme";
-
+import { useSetRecoilState } from "recoil";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPalette } from "@fortawesome/free-solid-svg-icons";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -61,7 +63,7 @@ table {
 body {
   font-family: 'Source Sans Pro', sans-serif;
   background-color:${(props) => props.theme.bgColor};
-  color:${(props) => props.theme.textColor}
+  color:${(props) => props.theme.accentColor}
 }
 a {
   text-decoration:none;
@@ -69,12 +71,48 @@ a {
 }
 `;
 
+const Nav = styled.div`
+  display: flex;
+  justify-content: center;
+  height: auto;
+  margin: 0 auto;
+
+  color: ${(props) => props.theme.accentColor};
+  background-color: ${(props) => props.theme.subColor};
+  div {
+    display: flex;
+    justify-content: end;
+    padding: 0px 20px;
+    width: 480px;
+    button {
+      margin: 5px;
+
+      text-decoration: none;
+      border-radius: 10px;
+      background-color: ${(props) => props.theme.subColor};
+      color: ${(props) => props.theme.accentColor};
+      font-size: 30px;
+      border: none;
+    }
+  }
+`;
+
 function App() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
   const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
+        <Nav>
+          <div>
+            <button onClick={toggleDarkAtom}>
+              <FontAwesomeIcon icon={faPalette} />
+            </button>
+          </div>
+        </Nav>
         <Router />
       </ThemeProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
